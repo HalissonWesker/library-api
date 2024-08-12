@@ -271,8 +271,149 @@ A API utiliza autenticação JWT para proteger os endpoints. Existem dois papéi
 
 ## 🧪 Testes
 
-Para rodar os testes:
+No projeto, foram implementados testes para validar os endpoints principais da API relacionados a autores, livros e empréstimos. Esses testes estão divididos entre testes de funcionalidade (Feature) que verificam se as funcionalidades estão funcionando como esperado ao interagir com a API.
+
+### Testes de Funcionalidade
+
+#### AuthorApiTest.php:
+
+- Verifica se é possível listar autores.
+- Testa a criação de novos autores com as informações corretas.
+- Verifica a atualização dos dados de um autor existente.
+- Testa a exclusão de um autor.
+
+#### BookApiTest.php:
+
+- Verifica se é possível listar livros.
+- Testa a criação de novos livros com os dados corretos.
+- Verifica a atualização dos dados de um livro existente.
+- Testa a exclusão de um livro.
+
+#### LoanApiTest.php:
+
+- Verifica se é possível listar empréstimos.
+- Testa a criação de novos empréstimos com os dados corretos.
+- Verifica a atualização dos dados de um empréstimo existente.
+- Testa a finalização (retorno) de um empréstimo.
+
+### Como Executar os Testes
+
+#### Executar Testes Usando o Laravel
+
+Para executar os testes automatizados que foram implementados, você pode utilizar o comando Artisan do Laravel:
 
 ```bash
 php artisan test
 ```
+
+Isso vai rodar todos os testes definidos nos diretórios `Feature` e `Unit`, validando o comportamento esperado das funcionalidades da API.
+
+### Testando Usando Insomnia
+
+O Insomnia é uma ferramenta popular para testar APIs REST. Para testar os endpoints da API `Library API` que você implementou, siga os passos abaixo:
+
+#### Instalação do Insomnia:
+
+Se você ainda não tiver o Insomnia instalado, você pode baixá-lo e instalá-lo a partir do [site oficial](https://insomnia.rest/download).
+
+#### Configuração do Insomnia:
+
+- Abra o Insomnia e crie um novo workspace ou use um existente.
+- Dentro do workspace, crie uma nova request e selecione o método HTTP correspondente (GET, POST, PUT, DELETE).
+
+#### Testando Autenticação:
+
+- **Registrar**: Crie uma request do tipo POST para `http://localhost:8000/api/register` com o payload:
+  ```json
+  {
+    "name": "Seu Nome",
+    "email": "seuemail@example.com",
+    "password": "suaSenha"
+  }
+  ```
+
+- **Login**: Crie uma request do tipo POST para `http://localhost:8000/api/login` com o payload:
+  ```json
+  {
+    "email": "seuemail@example.com",
+    "password": "suaSenha"
+  }
+  ```
+
+- Copie o `access_token` retornado e adicione-o no header das próximas requests usando:
+  ```bash
+  Authorization: Bearer {token}
+  ```
+
+#### Testando Endpoints de Autores:
+
+- **Listar Autores**: Crie uma request do tipo GET para `http://localhost:8000/api/authors`.
+
+- **Criar Autor**: Crie uma request do tipo POST para `http://localhost:8000/api/admin/authors` com o payload:
+  ```json
+  {
+    "name": "Autor Exemplo",
+    "birth_date": "1970-01-01"
+  }
+  ```
+
+- **Atualizar Autor**: Crie uma request do tipo PUT para `http://localhost:8000/api/admin/authors/{id}` com o payload:
+  ```json
+  {
+    "name": "Autor Atualizado",
+    "birth_date": "1975-05-05"
+  }
+  ```
+
+- **Deletar Autor**: Crie uma request do tipo DELETE para `http://localhost:8000/api/admin/authors/{id}`.
+
+#### Testando Endpoints de Livros:
+
+- **Listar Livros**: Crie uma request do tipo GET para `http://localhost:8000/api/books`.
+
+- **Criar Livro**: Crie uma request do tipo POST para `http://localhost:8000/api/admin/books` com o payload:
+  ```json
+  {
+    "title": "Livro Exemplo",
+    "publication_year": 2022,
+    "author_id": 1
+  }
+  ```
+
+- **Atualizar Livro**: Crie uma request do tipo PUT para `http://localhost:8000/api/admin/books/{id}` com o payload:
+  ```json
+  {
+    "title": "Livro Atualizado",
+    "publication_year": 2023,
+    "author_id": 1
+  }
+  ```
+
+- **Deletar Livro**: Crie uma request do tipo DELETE para `http://localhost:8000/api/admin/books/{id}`.
+
+#### Testando Endpoints de Empréstimos:
+
+- **Listar Empréstimos**: Crie uma request do tipo GET para `http://localhost:8000/api/admin/loans`.
+
+- **Criar Empréstimo**: Crie uma request do tipo POST para `http://localhost:8000/api/admin/loans` com o payload:
+  ```json
+  {
+    "user_id": 1,
+    "book_id": 1,
+    "borrow_date": "2024-01-01",
+    "return_date": "2024-01-15"
+  }
+  ```
+
+- **Atualizar Empréstimo**: Crie uma request do tipo PUT para `http://localhost:8000/api/admin/loans/{id}` com o payload:
+  ```json
+  {
+    "return_date": "2024-01-20"
+  }
+  ```
+
+- **Finalizar Empréstimo**: Crie uma request do tipo DELETE para `http://localhost:8000/api/admin/loans/{id}`.
+
+### Considerações Finais
+
+Testar a API usando o Insomnia permite que você simule as interações reais dos clientes com os endpoints, verificando se tudo está funcionando como esperado. Além disso, a execução dos testes automatizados ajuda a garantir que o comportamento esperado continue consistente mesmo após futuras alterações no código.
